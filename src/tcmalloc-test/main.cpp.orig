@@ -1,0 +1,43 @@
+#include <Windows.h> 
+#include <Mmsystem.h>
+#include <iostream>
+#include <tcmalloc.h>
+
+#define COUNT 1000*1000
+void func()
+{
+	size_t j = 0;
+	for (size_t i = 0; i < COUNT; ++i)
+	{
+		if (j > 1001)
+		{
+			j = 0;
+		}
+		int * pInt = (int*)malloc(i * sizeof(int));
+		free(pInt);
+	}
+}
+
+void func1()
+{
+	int i;
+	for (i = 0; i < 100000; i++) { char *p = (char*)malloc(i % 1000); free(p); }
+}
+
+void func2()
+{
+	int i;
+	for (i = 0; i < 100000; i++) { char *p = (char*)tc_malloc(i % 1000); tc_delete(p); }
+}
+
+int main(int argc, char** argv)
+{
+	DWORD tStart, tEnd;
+
+	tStart = timeGetTime();
+	func();
+	tEnd = timeGetTime();
+
+	printf("%lu\n", tEnd - tStart);
+	return 0;
+}
