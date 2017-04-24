@@ -1,20 +1,23 @@
-BOOK_CODE_PATH = "H:/rover/rover-self-work/cpp/book-code"
-THIRD_PARTY = "H:/rover/rover-self-work/cpp/book-code/3rdparty"
-
+BOOK_CODE_PATH = "E:/book-code"
+THIRD_PARTY = "E:/book-code/3rdparty"
+WORK_PATH = os.getcwd()
 includeexternal (BOOK_CODE_PATH .. "/premake-vs-include.lua")
-    
+
 
 workspace "cpp-datetime-examples"
     language "C++"
     location "build/%{_ACTION}/%{wks.name}"    
     if _ACTION == "vs2015" then
         toolset "v140_xp"
+    elseif _ACTION == "vs2013" then
+        toolset "v120_xp"
     end
 
     
     group "gtest"
 
         project "gtest"            
+            removeconfigurations "TRACE*"   
             kind "StaticLib"     
             defines { "GTEST_HAS_PTHREAD=0", "_HAS_EXCEPTIONS=1" }            
             files
@@ -34,7 +37,8 @@ workspace "cpp-datetime-examples"
         
     
 
-        project "gtest_main"            
+        project "gtest_main"     
+            removeconfigurations "TRACE*"   
             kind "StaticLib"     
             defines { "GTEST_HAS_PTHREAD=0", "_HAS_EXCEPTIONS=1" }            
             files
@@ -57,7 +61,8 @@ workspace "cpp-datetime-examples"
     
    
 
-        project "gmock"            
+        project "gmock"         
+            removeconfigurations "TRACE*"   
             kind "StaticLib"     
             defines { "GTEST_HAS_PTHREAD=0", "_HAS_EXCEPTIONS=1" }            
             files
@@ -81,7 +86,8 @@ workspace "cpp-datetime-examples"
     
     
 
-        project "gmock_main"            
+        project "gmock_main"   
+            removeconfigurations "TRACE*"   
             kind "StaticLib"     
             defines { "GTEST_HAS_PTHREAD=0", "_HAS_EXCEPTIONS=1" }            
             files
@@ -105,6 +111,7 @@ workspace "cpp-datetime-examples"
 
     group "glog"
         project "glog"            
+            removeconfigurations "TRACE*"   
             kind "StaticLib"
             defines { "GOOGLE_GLOG_DLL_DECL=", "HAVE_SNPRINTF" }
             files
@@ -139,7 +146,8 @@ workspace "cpp-datetime-examples"
             }
 
     group "gflags"
-        project "gflags"            
+        project "gflags"      
+            removeconfigurations "TRACE*"   
             kind "StaticLib"
             characterset "MBCS"
             defines { "GFLAGS_IS_A_DLL=0" }
@@ -161,7 +169,8 @@ workspace "cpp-datetime-examples"
                             
             }
 
-        project "gflags_nothreads"            
+        project "gflags_nothreads"        
+            removeconfigurations "TRACE*"   
             kind "StaticLib"
             characterset "MBCS"
             defines { "GFLAGS_IS_A_DLL=0", "NO_THREADS" }
@@ -184,7 +193,8 @@ workspace "cpp-datetime-examples"
             }
 
     group "tcmalloc"
-        project "libtcmalloc_minimal"            
+        project "libtcmalloc_minimal"     
+            removeconfigurations "TRACE*"   
             kind "SharedLib"
             characterset "MBCS"
             defines { "LIBTCMALLOC_MINIMAL_EXPORTS" }
@@ -360,3 +370,57 @@ workspace "cpp-datetime-examples"
             {
                 "/INCLUDE:\"__tcmalloc\""
             }
+
+
+        create_console_project("winhttp-test", "src")
+            links
+            {
+                
+                "comsuppw.lib"
+            }
+
+        create_console_project("wincrypt-api-test", "src")
+            includedirs
+            {
+                "%{THIRD_PARTY}/googletest/googletest/include",
+                "%{THIRD_PARTY}/googletest/googletest",
+                "%{THIRD_PARTY}/googletest/googlemock/include",
+                "%{THIRD_PARTY}/googletest/googlemock"
+            }
+            links
+            {
+                "gtest",
+                "crypt32.lib",
+                "winhttp.lib"
+            }
+
+        create_console_project("CreateSignature", "src")
+            includedirs
+            {
+                "src/CryptoApi"
+            }
+            links
+            {
+                
+                "crypt32.lib",
+                
+            }
+           
+        create_console_project("CryptoApiTest", "src")
+            includedirs
+            {
+                "src/CryptoApi",
+                "%{THIRD_PARTY}/googletest/googletest/include",
+                "%{THIRD_PARTY}/googletest/googletest",
+                "%{THIRD_PARTY}/googletest/googlemock/include",
+                "%{THIRD_PARTY}/googletest/googlemock"
+            }
+            links
+            {
+                "gtest",
+                "crypt32.lib",
+                
+            }
+
+        
+        

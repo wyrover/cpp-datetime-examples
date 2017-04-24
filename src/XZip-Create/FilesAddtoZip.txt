@@ -1,0 +1,10 @@
+CreateZip:WXWorld(0.0.0005-0.0.0006).zip
+ZipAdd:wxcommand
+ZipAdd:nosee.zip
+ZipAdd:Bin\UIBase.dll
+ZipAdd:Bin\UIFrame.dll
+ZipAdd:Bin\UISystem.dll
+ZipAdd:Bin\WXClient.exe
+ZipAdd:Bin\WXRender.dll
+ZipAdd:Bin\WXResources.cfg
+ZipAdd:wxversion
